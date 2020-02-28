@@ -25,16 +25,22 @@ platform :ios do
     scan
   end
 
-  desc "Submit a new Beta Build to Apple TestFlight"
-  desc "This will also make sure the profile is up to date"
+  desc "Submit a new Beta to Visual Studion AppCenter"
   lane :beta do
-    # match(type: "appstore") # more information: https://codesigning.guide
-    gym # Build your app - more options available
-    pilot
 
-    # sh "your_script.sh"
-    # You can also use other beta testing services here (run `fastlane actions`)
-  end
+    match(type: "adhoc")
+    gym 
+    
+    appcenter_upload(
+      api_token: "c08d6f323cf4b270635f792ef1248e2777828556",
+      owner_name: "Eric Jones",
+      app_name: "AppCenterTest",
+      ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      dsym: lane_context[SharedValues::DSYM_OUTPUT_PATH],
+      release_notes: (is_ci ? "This release is **automatic** from *master* branch." : "This release is **manual** from *"+git_branch+"* branch. Probably don't test it.") + "\n\n" + last_git_commit[:message],
+    )
+     
+ end
 
   desc "Deploy a new version to the App Store"
   lane :release do
