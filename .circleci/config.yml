@@ -126,6 +126,13 @@ jobs:
           name: set Ruby version
           command:  echo "ruby-2.4" > ~/.ruby-version
 
+      - restore_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+
+      - run:
+          command: bundle install
+          working_directory: ios
+
       - run:
           name: Deploy to AppCenter
           command: bundle exec fastlane beta
@@ -140,6 +147,10 @@ workflows:
       - ios:
           requires:
             - node
-      - deploy:
+      - request-deploy:
+          type: approval
           requires:
             - ios
+      - deploy:
+          requires:
+            - request-deploy
