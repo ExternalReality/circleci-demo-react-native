@@ -49,7 +49,7 @@ jobs:
       xcode: "9.0"
     working_directory: ~/demo-react-native
 
-    # use a --login shell so our "set Ruby version" command gets picked up for later steps
+
     shell: /bin/bash --login -o pipefail
 
     steps:
@@ -92,7 +92,7 @@ jobs:
             - vendor/bundle
 
       - run:
-          command: bundle exec fastlane beta
+          command: bundle exec fastlane test
           working_directory: ios
 
       - run:
@@ -110,10 +110,27 @@ jobs:
       - store_artifacts:
           path: ios/test-results
 
+
+  Deploy:
+    macos:
+      xcode: "9.0"
+    working_directory: ~/demo-react-native
+
+
+    shell: /bin/bash --login -o pipefail
+
+    steps:
+      - checkout
+
+      - run:
+          name: set Ruby version
+          command:  echo "ruby-2.4" > ~/.ruby-version
+
       - run:
           name: Deploy to AppCenter
           command: bundle exec fastlane beta
-          working_directory: ios
+          working_directory: ios 
+
 
 workflows:
   version: 2
