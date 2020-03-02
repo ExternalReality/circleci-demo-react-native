@@ -141,7 +141,21 @@ jobs:
 
 workflows:
   version: 2
-  node-ios:
+  node-ios-scheme1:
+    jobs:
+      - node
+      - ios:
+          requires:
+            - node
+      - request-deploy:
+          type: approval
+          requires:
+            - ios
+      - deploy:
+          requires:
+            - request-deploy
+
+  node-ios-scheme2:
     jobs:
       - node
       - ios:
