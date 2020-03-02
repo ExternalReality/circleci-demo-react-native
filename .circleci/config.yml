@@ -135,7 +135,7 @@ jobs:
 
       - run:
           name: Deploy to AppCenter
-          command: bundle exec fastlane beta
+          command: echo deploy
           working_directory: ios 
 
 
@@ -145,6 +145,7 @@ workflows:
     jobs:
       - node
       - ios:
+          context: XCSCHEME_A
           requires:
             - node
       - request-deploy:
@@ -159,6 +160,7 @@ workflows:
     jobs:
       - node
       - ios:
+          context: XCSCHEME_B
           requires:
             - node
       - request-deploy:
