@@ -111,7 +111,7 @@ jobs:
           path: ios/test-results
 
 
-  Deploy:
+  deploy:
     macos:
       xcode: "9.0"
     working_directory: ~/demo-react-native
@@ -140,3 +140,6 @@ workflows:
       - ios:
           requires:
             - node
+      - deploy:
+          requires:
+            - ios
